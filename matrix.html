@@ -1,0 +1,286 @@
+<html>
+	<head>
+		<title>Frame</title>
+		<script src='/js/style.js'></script>
+		<script src='/js/pubsub.io.js'></script>
+		<script src='/js/jkey.js'></script>
+		<style>
+		td {
+			padding:20px;
+			border:3px solid lightgray;
+		}
+		
+		#desired {
+			float: left;
+			padding-right:20px;
+		}
+		body {
+			padding:15px;
+			font-family: 'Helvetica Neue',Helvetica,sans-serif;
+			font-size: 14px;
+		}
+		#details {
+			color: gray;
+			font-family: 'Helvetica Neue',Helvetica,sans-serif;
+			font-size: 14px;
+		}
+		td {
+			background-color: black;
+		}
+		</style>
+		<script>		
+		var xPos = 0;
+		var yPos = 0;
+		var colors = ['black', 'red', 'orange', 'green', '#FF00FF', 'blue', '#008080', 'white'];
+
+		var which = function(color) {
+			switch(color)
+			{
+				//0
+				case 'rgb(0, 0, 0)':
+				return 0;
+
+				//1
+				case 'rgb(255, 0, 0)':
+				return 1;
+
+				//2
+				case 'rgb(255, 165, 0)':
+				return 2;
+
+				//3
+				case 'rgb(0, 128, 0)':
+				return 3;
+
+				//4
+				case 'rgb(255, 0, 255)':
+				return 4;
+
+				//5
+				case 'rgb(0, 0, 255)':
+				return 5;
+
+				//6
+				case 'rgb(0, 128, 128)':
+				return 6;
+
+				//7
+				case 'rgb(255, 255, 255)':
+				return 7;
+				default:
+				return 0;
+			}	
+		}
+
+		var publishScreen = function() {
+			var values = [];
+			//[4,1,1,1,1,2,1,3,4,2,1,2,1,2,1,2,4,2,1,1,2,1,1,2,4,2,2,3,3,1,2,2,4,3,1,1,1,2,3,2,4,1,1,2,1,2,3,1,4,3,3,1,2,1,2,3,4,0,0,5,6,7,0,0];
+
+			for( var i = 0; i < 8; i++) for( var j = 0; j < 8; j++) {
+					values.push(which($('#d-' + i + '-' + j).css('background-color')));
+			}
+
+			console.log(values);
+
+			$.get('/updateremote?values=[' + values + ']', function() {});
+		};
+
+		setInterval(publishScreen, 500);
+
+		var highlightpixel = function(xp,yp) {
+			$('td').css('border','3px solid lightgray');
+			$('#d-' + xp + '-' + yp).css('border','3px solid black');
+			$('#a-' + xp + '-' + yp).css('border','3px solid gray');
+		}
+		
+		$(function () {			
+			var x = 8;
+			var y = 8;
+			
+			var up = function(l) {
+				if(yPos > 0) {
+					yPos--;
+					highlightpixel(xPos,yPos);
+					return;
+				}
+				if(l !== 'l' && xPos === x-1) {
+					xPos = -1;
+				}
+				yPos = y-1;
+				right();		
+			};
+			var down = function() {
+				if(yPos < y-1) {
+					yPos++;
+					highlightpixel(xPos,yPos);
+					return;
+				}
+				if(xPos === 0) {
+					xPos = x;
+				}
+				yPos = 0;
+				left();
+			};
+			var left = function() {
+				if(xPos > 0) {
+					xPos--;
+					highlightpixel(xPos,yPos);
+					return;
+				}
+				if(xPos === 0 && yPos === 0) {
+					xPos = x-1;
+					yPos = y-1;
+					highlightpixel(xPos,yPos);
+					return;
+				}
+				xPos = x-1;
+				up();		
+			};
+			var right = function() {
+				if(xPos < x-1) {
+					xPos++;
+					highlightpixel(xPos,yPos);
+					return;
+				}
+				if(xPos === x-1 && yPos === y-1) {
+					xPos = 0.;
+					yPos = 0;
+					highlightpixel(xPos,yPos);
+					return;
+				}	
+				xPos = 0;
+				down();				
+			};
+			
+			var paint = function (colors) {
+				for( var color in colors) {
+					$('#d-' + color).css('background-color', colors[color]);
+				}
+			};
+
+			var refresh = function () {
+				for( var i = 0; i < x; i++) {
+					for( var j = 0; j < y; j++) {
+						var doc = {};							
+						var key = i + '-' + j;							
+						doc[key] = $('#d-' + key).css('background-color');
+						console.log(doc);
+					}
+				}
+			}
+			
+			var fill = function() {
+				for( var i = 0; i < x; i++) {
+					for( var j = 0; j < y; j++) {
+						$('#d-' + i + '-' + j).click();
+					}
+				}
+			}
+			
+			var clear = function () {
+				paint(init);
+			};
+			
+			var zero = function() {
+				pinta(0);
+			};
+
+			var one = function() {
+				pinta(1);
+			};
+			
+			var two = function() {
+				pinta(2);
+			};
+
+			var three = function() {
+				pinta(3);
+			};
+
+			var four = function() {
+				pinta(4);
+			};
+
+			var five = function() {
+				pinta(5);
+			};
+
+			var six = function() {
+				pinta(6);
+			};
+
+			var seven = function() {
+				pinta(7);
+			};
+
+			var pinta = function(num) {
+				$('#d-' + xPos + '-' + yPos).css('background-color', colors[num]);
+			};
+
+			$(window).jkey('0', zero);
+			$(window).jkey('1', one);
+			$(window).jkey('2', two);
+			$(window).jkey('3', three);
+			$(window).jkey('4', four);
+			$(window).jkey('5', five);
+			$(window).jkey('6', six);
+			$(window).jkey('7', seven);
+			$(window).jkey('down', down);
+			$(window).jkey('up', up);
+			$(window).jkey('right', right);
+			$(window).jkey('left', left);
+			$(window).jkey('f', fill);
+			$(window).jkey('r', refresh);
+			$(window).jkey('esc', clear);
+									
+			$(window).jkey('space', function() {
+				$('#d-' + xPos + '-' + yPos).click();
+			});
+
+			var table = $('<table></table>');
+			var init = {};
+
+			for(var i = 0; i < y; i++) {
+				var row = $('<tr></tr>');
+				
+				for(var j = 0; j < x; j++) {
+					var td = $('<td id=d-'+j+'-'+i+'></td>');
+					
+					(function(j,i){
+						var key = j + '-' + i;
+						var state = 0;						
+						
+						init[key] = colors[state];
+						
+						td.click(function() {	
+							var doc = {};							
+
+							state = (state + 1) % colors.length;
+														
+							$(this).css('background-color', colors[state]);
+							console.log(colors[state]);
+							
+							xPos = j;
+							yPos = i;
+							
+							doc[key] = colors[state];
+							highlightpixel(j,i);
+						});
+					})(j,i);
+					
+					row.append(td);
+				}
+				table.append(row);
+			}
+			
+			$('#desired').append(table);
+			highlightpixel(xPos,yPos);
+		});
+		</script>
+	</head>
+	<body>
+		<div id='desired'>
+			<h2>Frame</h2>
+		</div>
+	</body>
+</html>
