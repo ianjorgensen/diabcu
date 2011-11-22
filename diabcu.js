@@ -17,7 +17,7 @@ var sad = [ 1, 4, 4, 4, 4, 4, 4, 3,
 			1, 2, 2, 2, 2, 2, 2, 2,];
 
 
-exports.parseXLS = function(callback) {
+var parseXLS = function(callback) {
 	xls.parse(file, function(err, data) {
 		if (err) {
 			callback(null, sad);
@@ -27,6 +27,7 @@ exports.parseXLS = function(callback) {
 		callback(null, magic.display(data));
 	});
 };
+exports.parseXLS = parseXLS;
 
 exports.display = function(email, password, callback) {
 	common.step([
