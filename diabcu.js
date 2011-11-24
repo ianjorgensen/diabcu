@@ -20,7 +20,7 @@ var sad = [ 1, 4, 4, 4, 4, 4, 4, 3,
 var parseXLS = function(callback) {
 	xls.parse(file, function(err, data) {
 		if (err) {
-			callback(null, sad);
+			callback(err);
 			return;
 		}
 
@@ -54,6 +54,6 @@ exports.display = function(email, password, callback) {
 			callback(null, display);
 		}
 	], function(err) {
-		callback(null, sad);
+		callback(err);
 	});	
 };

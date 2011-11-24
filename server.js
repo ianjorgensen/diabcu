@@ -6,8 +6,10 @@ var bark = require('bark');
 var parse = require('url').parse;
 var qs = require('querystring');
 
-var readings = [4,1,1,1,1,2,1,3,4,2,1,2,1,2,1,2,4,2,1,1,2,1,1,2,4,2,2,3,3,1,2,2,4,3,1,1,1,2,3,2,4,1,1,2,1,2,3,1,4,3,3,1,2,1,2,3,4,0,0,0,0,0,0,0];
+//var readings = [4,1,1,1,1,2,1,3,4,2,1,2,1,2,1,2,4,2,1,1,2,1,1,2,4,2,2,3,3,1,2,2,4,3,1,1,1,2,3,2,4,1,1,2,1,2,3,1,4,3,3,1,2,1,2,3,4,0,0,0,0,0,0,0];
+var readings = [4,1,1,1,1,2,1,3,4,2,1,2,1,2,1,2,4,2,1,1,2,1,1,2,4,2,2,3,3,1,2,2,4,3,1,1,1,2,3,2,4,1,1,2,1,2,3,1,4,3,3,1,2,1,2,3,4,3,3,1,0,0,0,0];
 
+var values = [4, 4, 4, 4, 2, 2, 3, 4, 4, 4, 4, 3, 4, 4, 3, 4, 4, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 2, 4, 4, 2, 4, 4, 3, 4, 3, 1, 2, 4, 4, 2, 5, 1, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 6, 5, 4, 4, 4, 4, 4, 4, 7, 4, 4];
 var update = function() {
 	diabcu.display(config.email, config.password, function(err, data) {
 		if (data) { 
@@ -137,4 +139,8 @@ server.get('/frame', bark.file('./matrix.html'));
 
 server.get('/js/*', bark.file('./js/{*}'));
 
+var port = process.argv[2] || 10545;
+
 server.listen(10545);
+
+console.log('server running on port ', port);
