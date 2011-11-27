@@ -1,7 +1,8 @@
 var diabcu = require('./diabcu');
 var config = require('./config');
 var server = require('router').create();
-var buffoon = require('buffoon'); 
+var buffoon = require('buffoon');
+var bark = require('bark');
 var parse = require('url').parse;
 var qs = require('querystring');
 

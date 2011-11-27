@@ -14,7 +14,6 @@ var parseXLS = function(callback) {
 			return;
 		}
 		
-		console.log(data);
 		callback(null, magic.display(data));
 	});
 };
