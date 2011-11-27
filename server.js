@@ -18,12 +18,23 @@ var update = function() {
 	});
 };
 
-setInterval(update,60000);
+setInterval(update,180000);
 update();
+
 
 server.get('/', function(request, response) {
 	response.writeHead(200, {'content-type':'application/json'});
 	response.end(JSON.stringify(readings));
+});
+
+server.get('/loadxls', function(request, response) {
+	diabcu.parseXLS(function(err, data) {
+		if (data) { 
+			readings = data;	
+		}
+		response.writeHead(200, {'content-type':'application/json'});
+		response.end(JSON.stringify(readings));
+	});
 });
 
 server.get('/force', function(request, response) {
@@ -141,6 +152,6 @@ server.get('/js/*', bark.file('./js/{*}'));
 
 var port = process.argv[2] || 10545;
 
-server.listen(10545);
+server.listen(port);
 
 console.log('server running on port ', port);

@@ -8,10 +8,11 @@ exports.display = function(data) {
 	var displayweek = [];
 
 	for (var i = week; i > week-8; i--) {
-		var display = [];	
-		display.push(4); // first is always magenta
+		var displa = [];	
+		displa.push(4); // first is always magenta
 
 		for (var j = 0; j < 7; j++) {
+			
 			var percent = ((weeks[i] || [])[j] || {}).percent;
 			
 			var color = 0; // 0 - black , 1 - red , 2 - yellow , 3 - green, 4 - magenta
@@ -26,20 +27,18 @@ exports.display = function(data) {
 				color = 3
 			}
 			
-			display.push(color);
+			displa.push(color);
 		};
-		displayweek.push(display);
+		displayweek.push(displa);
 	};
-	
-	//console.log(displayweek);
 
-	var display = [];
+	var displ = [];
 	
 	for (var i = displayweek.length - 1; i >= 0; i--) for (var j = 0; j < displayweek[i].length; j++) {
-		display.push(displayweek[i][j]);
+		displ.push(displayweek[i][j]);
 	}
 	
-	return display;	
+	return displ;	
 };
 
 var statify = function(data) {
@@ -71,19 +70,21 @@ var statify = function(data) {
 }
 var normalize = function(data) {
 	var readings = [];
-	var rows = data['excel_workbook'].sheets.sheet[0].rows;
+	
+	var rows = data.sheets.sheet[0].rows.row;
+
 	var date_sort_desc = function (reading1, reading2) {
 	  if (reading1.date > reading2.date) return -1;
 	  if (reading1.date < reading2.date) return 1;
 	  return 0;
 	};
 
-	for(var i = 5; i < rows.row.length; i++) {
-		var cell = rows.row[i].cell;
+	for(var i = 5; i < rows.length; i++) {
+		var cell = rows[i].cell;
 
 		readings.push({
-			date: new Date(cell[0]['$t']),
-			value: cell[1]['$t']
+			date: new Date(cell[0]['#']),
+			value: cell[1]['#']
 		});
 	}
 
