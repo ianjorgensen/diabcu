@@ -153,3 +153,5 @@ var port = process.argv[2] || 10545;
 server.listen(port);
 
 console.log('server running on port ', port);
+
+process.on('uncaughtException', function(err) { console.error(err.stack) });
